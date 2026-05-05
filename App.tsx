@@ -5,9 +5,9 @@
  * @format
  */
 
-import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import OnBoarding from './src/screens/OnBoarding';
+import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import StackNavigator from './src/navigations/StackNavigator';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -22,9 +22,9 @@ function App() {
 
 function AppContent() {
   return (
-    <SafeAreaView style={styles.container}>
-      <OnBoarding />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <StackNavigator />
+    </View>
   );
 }
 

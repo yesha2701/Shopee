@@ -9,7 +9,10 @@ import { colors } from '../Themes/Colors';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: colors.white,
+  },
+  mainView: {
+    marginTop: verticalScale(200),
     alignItems: 'center',
   },
   logoView: {
@@ -21,11 +24,12 @@ export const styles = StyleSheet.create({
     shadowColor: colors.black,
     shadowOpacity: moderateScale(0.2),
     shadowRadius: moderateScale(8),
-    marginBottom: verticalScale(24),
+    marginVertical: verticalScale(24),
   },
   textView: {
     alignItems: 'center',
     rowGap: verticalScale(18),
+    marginBottom: verticalScale(80),
   },
   titleStyle: {
     fontWeight: '700',
@@ -38,5 +42,15 @@ export const styles = StyleSheet.create({
     lineHeight: verticalScale(33),
     textAlign: 'center',
     letterSpacing: moderateScale(1),
+  },
+  accountStyle: {
+    fontSize: moderateScale(15),
+    fontWeight: '300',
+    lineHeight: verticalScale(30),
+  },
+  accountView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    columnGap: horizontalScale(16),
   },
 });

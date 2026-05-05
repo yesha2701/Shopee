@@ -1,13 +1,23 @@
 import { StyleSheet } from 'react-native';
-import { moderateScale } from '../Themes/Metrics';
+import {
+  horizontalScale,
+  moderateScale,
+  verticalScale,
+} from '../Themes/Metrics';
+import { colors } from '../Themes/Colors';
 
 export const styles = StyleSheet.create({
   button: {
-    borderWidth: 1,
+    paddingVertical: verticalScale(15),
+    paddingHorizontal: horizontalScale(90),
+    backgroundColor: colors.primary,
+    borderRadius: moderateScale(16),
+    marginVertical: verticalScale(20),
   },
   text: {
     fontWeight: '300',
     fontSize: moderateScale(22),
-    // lineHeight: verticalScale(31),
+    color: colors.white,
+    textAlign: 'center',
   },
 });
