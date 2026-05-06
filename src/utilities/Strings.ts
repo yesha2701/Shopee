@@ -11,4 +11,6 @@ export const strings = {
   announcement: 'Announcement',
   lorem:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit luctus libero ac vulputate.',
+  nextItem: 'Next Items',
+  seeAll: 'See All',
 };

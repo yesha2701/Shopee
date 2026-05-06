@@ -6,4 +6,5 @@ export const colors = {
   focus: '#37ABFF',
   transparent: 'transparent',
   red: 'red',
+  inactive: '#00000036',
 };

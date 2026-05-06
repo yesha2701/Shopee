@@ -8,6 +8,9 @@
 import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import StackNavigator from './src/navigations/StackNavigator';
+import { Provider } from 'react-redux';
+import { persistedStore, store } from './src/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -23,7 +26,11 @@ function App() {
 function AppContent() {
   return (
     <View style={styles.container}>
-      <StackNavigator />
+      <Provider store={store}>
+        <PersistGate persistor={persistedStore}>
+          <StackNavigator />
+        </PersistGate>
+      </Provider>
     </View>
   );
 }
