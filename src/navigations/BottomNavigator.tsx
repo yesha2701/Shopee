@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
-import Detail from '../screens/Detail';
+import Details from '../screens/Details';
 import Profile from '../screens/Profile';
 import { Image, View } from 'react-native';
 import { icons } from '../../assets/icons';
@@ -12,8 +12,8 @@ const BottomNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: colors.black,
-        tabBarInactiveTintColor: colors.primary,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.black,
         headerShown: false,
       }}
     >
@@ -26,7 +26,7 @@ const BottomNavigator = () => {
               <View>
                 <Image
                   source={icons.shop}
-                  style={{ tintColor: focused ? colors.black : colors.primary }}
+                  style={{ tintColor: focused ? colors.primary : colors.black }}
                 />
               </View>
             );
@@ -35,14 +35,14 @@ const BottomNavigator = () => {
       />
       <Tab.Screen
         name="Details"
-        component={Detail}
+        component={Details}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
               <View>
                 <Image
                   source={icons.details}
-                  style={{ tintColor: focused ? colors.black : colors.primary }}
+                  style={{ tintColor: focused ? colors.primary : colors.black }}
                 />
               </View>
             );
@@ -58,7 +58,7 @@ const BottomNavigator = () => {
               <View>
                 <Image
                   source={icons.profile}
-                  style={{ tintColor: focused ? colors.black : colors.primary }}
+                  style={{ tintColor: focused ? colors.primary : colors.black }}
                 />
               </View>
             );

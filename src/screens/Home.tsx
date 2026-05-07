@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   FlatList,
   Image,
@@ -23,6 +23,10 @@ import { RootState } from '../redux/store';
 import { useRef } from 'react';
 import { fetchData } from '../redux/actions/userActions';
 import { Todo } from '../redux/slice/UserSlice';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../types/navigationType';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
   const carouselImages = [
@@ -34,7 +38,6 @@ const Home = () => {
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
   const Data = useSelector((state: RootState) => state.items);
-  console.log('Data--------------------------- :>> ', Data);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,18 +51,28 @@ const Home = () => {
     });
   };
 
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const onNavigate = () => {
+    navigation.navigate('Details');
+  };
+
   const Item = ({ item }: { item: Todo }) => {
     return (
       <View style={styles.listView}>
-        <View style={styles.listImgView}>
+        <View style={styles.listItems}>
           <Image source={{ uri: item.thumbnail }} style={styles.listImg} />
+          <Text style={styles.listTitle}>{item.title}</Text>
+        </View>
+        <View>
+          <Text style={styles.listPrice}> ${item.price}</Text>
         </View>
       </View>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.topView}>
           <Text style={styles.helloStyle}>{strings.greet}</Text>
@@ -106,7 +119,10 @@ const Home = () => {
           <Text style={styles.nextTitle}>{strings.nextItem}</Text>
           <View style={styles.nextInnerView}>
             <Text style={styles.seeTitle}>{strings.seeAll}</Text>
-            <CustomArrowButton source={icons.rightArrow} onPress={() => null} />
+            <CustomArrowButton
+              source={icons.rightArrow}
+              onPress={() => onNavigate()}
+            />
           </View>
         </View>
         <View style={styles.itemsView}>
@@ -118,7 +134,7 @@ const Home = () => {
           />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

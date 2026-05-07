@@ -13,4 +13,11 @@ export const strings = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas hendrerit luctus libero ac vulputate.',
   nextItem: 'Next Items',
   seeAll: 'See All',
+  categories: 'Categories',
+  justForYou: 'Just For You',
+  id: 'Id',
+  name: 'Title',
+  price: 'Price',
+  description: 'Description',
+  returnPolicy: 'Return Policy',
 };

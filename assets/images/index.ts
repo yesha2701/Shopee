@@ -11,4 +11,9 @@ export const images = {
   cosmetic02: require('../images/cosmetic02.png'),
   cosmetic03: require('../images/cosmetic03.jpg'),
   cosmetic04: require('../images/cosmetic04.jpg'),
+  beauty: require('../images/beauty.png'),
+  fragrance: require('../images/fragrance.png'),
+  furniture: require('../images/furniture.png'),
+  groceries: require('../images/groceries.png'),
+  all: require('../images/All.jpeg'),
 };

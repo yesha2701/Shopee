@@ -7,4 +7,5 @@ export const colors = {
   transparent: 'transparent',
   red: 'red',
   inactive: '#00000036',
+  lightGrey: '#d1d3d5e7',
 };

@@ -13,6 +13,7 @@ export interface Todo {
   category: string;
   price: string;
   thumbnail: string;
+  returnPolicy: string;
 }
 
 interface todoState {

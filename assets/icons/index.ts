@@ -6,4 +6,7 @@ export const icons = {
   shop: require('../icons/Shop.png'),
   details: require('../icons/details.png'),
   profile: require('../icons/profile.png'),
+  edit: require('../icons/edit.png'),
+  delete: require('../icons/delete.png'),
+  add: require('../icons/add.png'),
 };

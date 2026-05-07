@@ -10,10 +10,9 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    padding: moderateScale(20),
+    padding: moderateScale(15),
   },
   topView: {
-    marginTop: verticalScale(40),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -52,7 +51,6 @@ export const styles = StyleSheet.create({
   carouselItem: {
     flex: 1,
     justifyContent: 'center',
-    overflow: 'hidden',
   },
   carouselImg: {
     width: horizontalScale(335),
@@ -90,25 +88,35 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   itemsView: {
-    marginTop: verticalScale(20),
+    marginTop: verticalScale(25),
   },
   listView: {
-    // backgroundColor: 'yellow',
+    marginRight: horizontalScale(6),
+    width: horizontalScale(130),
+    rowGap: verticalScale(6),
   },
-  listImgView: {
-    // backgroundColor: 'red',
-    padding: moderateScale(5),
-    marginRight: horizontalScale(8),
-    borderRadius: moderateScale(10),
-    shadowOffset: { width: 0, height: 5 },
-    shadowColor: colors.black,
-    shadowOpacity: 0.2,
-    shadowRadius: moderateScale(10),
+  listItems: {
+    flex: 1,
+    rowGap: verticalScale(6),
   },
   listImg: {
     height: verticalScale(130),
     width: horizontalScale(130),
-    // borderWidth: 1,
-    // backgroundColor: 'lightblue',
+    borderWidth: moderateScale(1),
+    borderRadius: moderateScale(10),
+    borderColor: colors.lightGrey,
+    shadowOffset: { width: 0, height: 5 },
+    shadowColor: colors.black,
+    shadowOpacity: moderateScale(0.2),
+    shadowRadius: moderateScale(10),
+  },
+  listTitle: {
+    fontSize: moderateScale(12),
+    fontWeight: '400',
+    letterSpacing: moderateScale(1),
+  },
+  listPrice: {
+    fontSize: moderateScale(17),
+    fontWeight: '700',
   },
 });
