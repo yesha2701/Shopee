@@ -16,14 +16,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { images } from '../../assets/images';
 import { Todo } from '../redux/slice/UserSlice';
-import { fetchData } from '../redux/actions/userActions';
+import { deleteData, fetchData } from '../redux/actions/userActions';
 import { icons } from '../../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../types/navigationType';
 import { CustomArrowButton } from '../components/CustomArrowButton';
+// import { v4 as uuidv4 } from 'uuid';
 
 const Details = () => {
+  console.log('Details-------------------------------------');
   const categories = [
     images.all,
     images.beauty,
@@ -32,7 +34,6 @@ const Details = () => {
     images.groceries,
   ];
   const [searchQuery, setSearchQuery] = useState('');
-  const [isCategory, setIsCategory] = useState('All');
   const Data = useSelector((state: RootState) => state.items);
   const dispatch = useDispatch();
 
@@ -51,6 +52,10 @@ const Details = () => {
     dispatch(fetchData());
   }, [dispatch]);
 
+  const onUpdate = (item: Todo) => {
+    navigation.navigate('Form', { item, isEdit: true });
+  };
+
   const filteredList = Data?.filter(items => {
     const onSearch = items?.title
       ?.toLowerCase()
@@ -65,7 +70,6 @@ const Details = () => {
     // && onFilter;
     return onSearch;
   });
-
   const Items = ({ item }: { item: Todo }) => {
     return (
       <View style={styles.listView}>
@@ -74,14 +78,14 @@ const Details = () => {
           onPress={() => onNavigate(item)}
         >
           <View style={styles.iconView}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => onUpdate(item)}>
               <Image source={icons.edit} />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => dispatch(deleteData(item.id))}>
               <Image source={icons.delete} />
             </TouchableOpacity>
           </View>
-          <Image source={{ uri: item.thumbnail }} style={styles.listImg} />
+          <Image source={{ uri: item.image }} style={styles.listImg} />
         </TouchableOpacity>
         <Text style={styles.listText}>{item.title}</Text>
         <Text style={styles.listPrice}>${item.price}</Text>
@@ -110,7 +114,7 @@ const Details = () => {
                   return (
                     <TouchableOpacity
                       style={styles.categoryBtn}
-                      onPress={() => setIsCategory(item)}
+                      onPress={() => null}
                     >
                       <Image source={item} style={styles.categoriesImg} />
                     </TouchableOpacity>

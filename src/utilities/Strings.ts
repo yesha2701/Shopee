@@ -20,4 +20,6 @@ export const strings = {
   price: 'Price',
   description: 'Description',
   returnPolicy: 'Return Policy',
+  image: 'Upload Image',
+  upload: 'Upload',
 };

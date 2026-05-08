@@ -9,4 +9,5 @@ export const icons = {
   edit: require('../icons/edit.png'),
   delete: require('../icons/delete.png'),
   add: require('../icons/add.png'),
+  image: require('../icons/image.png'),
 };

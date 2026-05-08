@@ -5,11 +5,12 @@ import { useRoute } from '@react-navigation/native';
 import { Todo } from '../redux/slice/UserSlice';
 
 const Profile = () => {
+  console.log('Profile-------------------------------');
   const route = useRoute();
   const { item } = route.params as { item: Todo };
   return (
     <View style={styles.container}>
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
+      <Image source={{ uri: item.image }} style={styles.image} />
       <View style={styles.detailView}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.price}>${item.price}</Text>

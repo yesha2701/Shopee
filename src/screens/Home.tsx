@@ -29,6 +29,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
+  console.log('Home----------------------------------------');
   const carouselImages = [
     images.cosmetic01,
     images.cosmetic02,
@@ -61,7 +62,7 @@ const Home = () => {
     return (
       <View style={styles.listView}>
         <View style={styles.listItems}>
-          <Image source={{ uri: item.thumbnail }} style={styles.listImg} />
+          <Image source={{ uri: item.image }} style={styles.listImg} />
           <Text style={styles.listTitle}>{item.title}</Text>
         </View>
         <View>

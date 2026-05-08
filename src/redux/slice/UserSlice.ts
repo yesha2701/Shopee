@@ -12,7 +12,7 @@ export interface Todo {
   description: string;
   category: string;
   price: string;
-  thumbnail: string;
+  image: string;
   returnPolicy: string;
 }
 

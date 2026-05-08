@@ -10,12 +10,13 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingTop: verticalScale(50),
+    paddingTop: verticalScale(15),
     paddingHorizontal: horizontalScale(15),
   },
   header: {
     fontSize: moderateScale(24),
     fontWeight: '700',
+    textAlign: 'center',
   },
   formView: {
     marginTop: verticalScale(15),
@@ -35,5 +36,34 @@ export const styles = StyleSheet.create({
     marginBottom: verticalScale(5),
     fontSize: moderateScale(16),
     fontWeight: '600',
+  },
+  placeholderStyle: {
+    color: colors.lightGrey,
+  },
+  errorText: {
+    color: colors.red,
+  },
+  imageView: {
+    height: verticalScale(100),
+    width: horizontalScale(100),
+    borderWidth: moderateScale(1),
+    borderStyle: 'dashed',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: moderateScale(10),
+    marginTop: verticalScale(8),
+  },
+  uriImage: {
+    height: verticalScale(90),
+    width: horizontalScale(90),
+    borderRadius: moderateScale(10),
+  },
+  buttonStyle: {
+    paddingHorizontal: horizontalScale(8),
+    marginRight: horizontalScale(240),
+    paddingVertical: verticalScale(8),
+  },
+  textStyle: {
+    fontSize: moderateScale(16),
   },
 });
