@@ -18,8 +18,8 @@ import Carousel, {
 } from 'react-native-reanimated-carousel';
 import { images } from '../../assets/images';
 import { useSharedValue } from 'react-native-reanimated';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../redux/store';
 import { useRef } from 'react';
 import { fetchData } from '../redux/actions/userActions';
 import { Todo } from '../redux/slice/UserSlice';
@@ -29,7 +29,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Home = () => {
-  console.log('Home----------------------------------------');
   const carouselImages = [
     images.cosmetic01,
     images.cosmetic02,
@@ -39,7 +38,7 @@ const Home = () => {
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
   const Data = useSelector((state: RootState) => state.items);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchData());

@@ -16,12 +16,13 @@ export interface Todo {
   returnPolicy: string;
 }
 
-interface todoState {
+export interface todoState {
   items: Todo[];
-  loading: boolean;
 }
 
-const initialState: todoState = { items: [], loading: false };
+const initialState: todoState = {
+  items: [],
+};
 
 const UserSlice = createSlice({
   name: 'items',

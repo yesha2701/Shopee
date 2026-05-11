@@ -15,13 +15,19 @@ export const insertData = createAsyncThunk('items/post', async itemData => {
 
 export const updateData = createAsyncThunk(
   'items/put',
-  async ({ id, title }: any) => {
-    const response = await axios.put(`${Api_Url}/${id}`, { title });
+  async ({ id, data }: { id: string; data: any }) => {
+    console.log('id--------------------- :>> ', id);
+    console.log('data--------------------- :>> ', data);
+    const response = await axios.put(`${Api_Url}/${id}`, data);
+    console.log('response------------------------ :>> ', response);
     return response.data;
   },
 );
 
-export const deleteData = createAsyncThunk('items/delete', async id => {
-  await axios.delete(`${Api_Url}/${id}`);
-  return id;
-});
+export const deleteData = createAsyncThunk(
+  'items/delete',
+  async (id: string) => {
+    await axios.delete(`${Api_Url}/${id}`);
+    return id;
+  },
+);

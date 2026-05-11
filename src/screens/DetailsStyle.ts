@@ -69,8 +69,10 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(10),
   },
   listImg: {
-    width: horizontalScale(155),
-    height: verticalScale(171),
+    width: horizontalScale(135),
+    height: verticalScale(160),
+    borderRadius: moderateScale(10),
+    margin: moderateScale(10),
   },
   listText: {
     fontSize: moderateScale(12),
@@ -92,5 +94,16 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  footer: {
+    padding: moderateScale(10),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  indicater: {
+    margin: moderateScale(5),
+  },
+  footerText: {
+    color: colors.lightGrey,
   },
 });

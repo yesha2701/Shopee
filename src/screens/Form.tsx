@@ -1,4 +1,4 @@
-import { Image, ScrollView, Text, TextInput, View } from 'react-native';
+import { Alert, Image, ScrollView, Text, TextInput, View } from 'react-native';
 import { styles } from './FormStyle';
 import { strings } from '../utilities/strings';
 import CustomTextInput from '../components/CustomTextInput';
@@ -9,15 +9,14 @@ import { CustomCancelButton } from '../components/CustomCancelButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { icons } from '../../assets/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDispatch } from 'react-redux';
 import { insertData, updateData } from '../redux/actions/userActions';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationType';
 import { Todo } from '../redux/slice/UserSlice';
+import { useAppDispatch } from '../redux/store';
 
 const Form = () => {
-  console.log('Form----------------------------------------');
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const onCancel = () => {
@@ -28,7 +27,7 @@ const Form = () => {
     navigation.navigate('BottomNavigator', { screen: 'Details' });
   };
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const route = useRoute();
   const data = route.params as { isEdit: boolean; item: Todo };
@@ -37,6 +36,7 @@ const Form = () => {
 
   useEffect(() => {
     if (isEdit === true) {
+      setId(editItem.id);
       setTitle(editItem.title);
       setImage(editItem.image);
       setPrice(editItem.price);
@@ -54,6 +54,7 @@ const Form = () => {
     { label: 'groceries', value: 'groceries' },
   ];
 
+  const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [image, setImage] = useState('');
   const [price, setPrice] = useState('');
@@ -103,6 +104,32 @@ const Form = () => {
     }
   };
 
+  const onInsert = () => {
+    Alert.alert('Confirmation', 'Are you sure you want to insert data', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => [
+          dispatch(
+            insertData({
+              title,
+              image,
+              price,
+              category,
+              description,
+              returnPolicy,
+            }),
+          ),
+          onNavigate(),
+        ],
+      },
+    ]);
+  };
+
   const onSubmit = () => {
     let formError = { field: '', message: '' };
 
@@ -139,29 +166,25 @@ const Form = () => {
     }
 
     isEdit
-      ? dispatch(
-          updateData({
-            title,
-            image,
-            price,
-            category,
-            description,
-            returnPolicy,
-          }),
-        )
-      : dispatch(
-          insertData({
-            title,
-            image,
-            price,
-            category,
-            description,
-            returnPolicy,
-          }),
-        );
+      ? [
+          dispatch(
+            updateData({
+              id,
+              data: {
+                title: title,
+                image: image,
+                price: price,
+                category: category,
+                description: description,
+                returnPolicy: returnPolicy,
+              },
+            }),
+          ),
+          onNavigate(),
+        ]
+      : onInsert();
 
     onClearInput();
-    onNavigate();
   };
 
   return (
@@ -263,7 +286,10 @@ const Form = () => {
             )}
           </View>
         </View>
-        <CustomButton label="Submit" onPress={() => onSubmit()} />
+        <CustomButton
+          label={isEdit ? 'Update' : 'Submit'}
+          onPress={() => onSubmit()}
+        />
         <CustomCancelButton label="Cancel" onPress={() => onCancel()} />
       </ScrollView>
     </SafeAreaView>

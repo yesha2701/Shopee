@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -12,8 +13,8 @@ import {
 import { styles } from './DetailsStyle';
 import { strings } from '../utilities/strings';
 import CustomTextInput from '../components/CustomTextInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import { useSelector } from 'react-redux';
+import { RootState, useAppDispatch } from '../redux/store';
 import { images } from '../../assets/images';
 import { Todo } from '../redux/slice/UserSlice';
 import { deleteData, fetchData } from '../redux/actions/userActions';
@@ -22,10 +23,8 @@ import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../types/navigationType';
 import { CustomArrowButton } from '../components/CustomArrowButton';
-// import { v4 as uuidv4 } from 'uuid';
 
 const Details = () => {
-  console.log('Details-------------------------------------');
   const categories = [
     images.all,
     images.beauty,
@@ -34,8 +33,9 @@ const Details = () => {
     images.groceries,
   ];
   const [searchQuery, setSearchQuery] = useState('');
+
   const Data = useSelector((state: RootState) => state.items);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const navigation =
     useNavigation<BottomTabNavigationProp<RootStackParamList>>();
@@ -56,18 +56,25 @@ const Details = () => {
     navigation.navigate('Form', { item, isEdit: true });
   };
 
+  const onDelete = (item: Todo) => {
+    return Alert.alert(
+      'Confirmation Alert',
+      'Are you sure you want to delete this data?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        { text: 'OK', onPress: () => dispatch(deleteData(item.id)) },
+      ],
+    );
+  };
+
   const filteredList = Data?.filter(items => {
     const onSearch = items?.title
       ?.toLowerCase()
       ?.includes(searchQuery.toLowerCase());
-
-    // const onFilter =
-    // isCategory === 'All'
-    //   ? true
-    //   : isCategory === 'beauty'
-    //   ? items?.category === 'fragrance'
-    //   : items?.category === 'furniture';
-    // && onFilter;
     return onSearch;
   });
   const Items = ({ item }: { item: Todo }) => {
@@ -81,10 +88,11 @@ const Details = () => {
             <TouchableOpacity onPress={() => onUpdate(item)}>
               <Image source={icons.edit} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => dispatch(deleteData(item.id))}>
+            <TouchableOpacity onPress={() => onDelete(item)}>
               <Image source={icons.delete} />
             </TouchableOpacity>
           </View>
+
           <Image source={{ uri: item.image }} style={styles.listImg} />
         </TouchableOpacity>
         <Text style={styles.listText}>{item.title}</Text>
