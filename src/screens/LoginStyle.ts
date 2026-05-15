@@ -50,4 +50,7 @@ export const styles = StyleSheet.create({
     fontWeight: '300',
     letterSpacing: moderateScale(1),
   },
+  errorText: {
+    color: colors.red,
+  },
 });

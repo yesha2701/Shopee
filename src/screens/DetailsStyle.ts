@@ -40,15 +40,19 @@ export const styles = StyleSheet.create({
   categoryBtn: {
     marginRight: horizontalScale(10),
     backgroundColor: colors.white,
+    alignItems: 'center',
+  },
+  imgView: {
     padding: moderateScale(5),
-    borderRadius: moderateScale(35),
+    borderRadius: moderateScale(45),
     borderWidth: 1,
     borderColor: colors.lightGrey,
+    marginBottom: verticalScale(3),
   },
   categoriesImg: {
     height: verticalScale(60),
     width: horizontalScale(60),
-    borderRadius: moderateScale(30),
+    borderRadius: moderateScale(45),
   },
   itemView: {
     rowGap: verticalScale(15),

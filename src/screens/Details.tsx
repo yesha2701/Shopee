@@ -16,26 +16,30 @@ import CustomTextInput from '../components/CustomTextInput';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { images } from '../../assets/images';
-import { Todo } from '../redux/slice/UserSlice';
-import { deleteData, fetchData } from '../redux/actions/userActions';
+import { deleteItem, Todo } from '../redux/slice/itemsSlice';
+import { deleteData, fetchData } from '../redux/actions/itemsAction';
 import { icons } from '../../assets/icons';
 import { useNavigation } from '@react-navigation/native';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { RootStackParamList } from '../types/navigationType';
 import { CustomArrowButton } from '../components/CustomArrowButton';
+import NetInfo from '@react-native-community/netinfo';
 
 const Details = () => {
   const categories = [
-    images.all,
-    images.beauty,
-    images.fragrance,
-    images.furniture,
-    images.groceries,
+    { id: 1, name: 'all', image: images.all },
+    { id: 2, name: 'beauty', image: images.beauty },
+    { id: 3, name: 'fragrance', image: images.fragrance },
+    { id: 4, name: 'furniture', image: images.furniture },
+    { id: 5, name: 'groceries', image: images.groceries },
   ];
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  console.log('selectedCategory :>> ', selectedCategory);
 
-  const Data = useSelector((state: RootState) => state.items);
+  const Data = useSelector((state: RootState) => state.itemSlice.items);
   const dispatch = useAppDispatch();
+  const network = NetInfo.fetch();
 
   const navigation =
     useNavigation<BottomTabNavigationProp<RootStackParamList>>();
@@ -66,16 +70,29 @@ const Details = () => {
           onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
-        { text: 'OK', onPress: () => dispatch(deleteData(item.id)) },
+        {
+          text: 'OK',
+          onPress: async () => {
+            if ((await network).isConnected) {
+              dispatch(deleteData(item.id));
+            } else {
+              dispatch(deleteItem(item.id));
+            }
+          },
+        },
       ],
     );
   };
 
-  const filteredList = Data?.filter(items => {
-    const onSearch = items?.title
+  const filteredList = Data?.filter(item => {
+    const onSearch = item.title
       ?.toLowerCase()
-      ?.includes(searchQuery.toLowerCase());
-    return onSearch;
+      .includes(searchQuery.toLowerCase());
+
+    const onFilter =
+      selectedCategory === 'all' || item.category === selectedCategory;
+
+    return onSearch && onFilter;
   });
   const Items = ({ item }: { item: Todo }) => {
     return (
@@ -118,18 +135,20 @@ const Details = () => {
             <View style={styles.categoryImgView}>
               <FlatList
                 data={categories}
-                renderItem={({ item }) => {
-                  return (
-                    <TouchableOpacity
-                      style={styles.categoryBtn}
-                      onPress={() => null}
-                    >
-                      <Image source={item} style={styles.categoriesImg} />
-                    </TouchableOpacity>
-                  );
-                }}
-                horizontal={true}
+                keyExtractor={item => item.id.toString()}
+                horizontal
                 showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.categoryBtn}
+                    onPress={() => setSelectedCategory(item.name)}
+                  >
+                    <View style={styles.imgView}>
+                      <Image source={item.image} style={styles.categoriesImg} />
+                    </View>
+                    <Text>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
               />
             </View>
           </View>

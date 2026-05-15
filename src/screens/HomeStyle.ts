@@ -53,14 +53,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   carouselImg: {
-    width: horizontalScale(335),
-    height: verticalScale(140),
+    width: horizontalScale(345),
+    height: verticalScale(150),
     borderRadius: moderateScale(10),
   },
   dotContainer: {
     columnGap: horizontalScale(4),
   },
   inactiveDot: {
+    marginTop: verticalScale(5),
     backgroundColor: colors.inactive,
     borderRadius: moderateScale(5),
   },

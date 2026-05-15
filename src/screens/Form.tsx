@@ -9,13 +9,17 @@ import { CustomCancelButton } from '../components/CustomCancelButton';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { icons } from '../../assets/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { insertData, updateData } from '../redux/actions/userActions';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { insertData, updateData } from '../redux/actions/itemsAction';
+import {
+  ImageLibraryOptions,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationType';
-import { Todo } from '../redux/slice/UserSlice';
+import { addItem, Todo, updateItem } from '../redux/slice/itemsSlice';
 import { useAppDispatch } from '../redux/store';
-
+import NetInfo from '@react-native-community/netinfo';
+// import { useSelector } from 'react-redux';
 const Form = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -27,6 +31,10 @@ const Form = () => {
     navigation.navigate('BottomNavigator', { screen: 'Details' });
   };
 
+  // const dataList = useSelector(
+  //   (state: RootState) => state.itemSlice.offlineData,
+  // );
+  // console.log('dataList :>> ', dataList);
   const dispatch = useAppDispatch();
 
   const route = useRoute();
@@ -45,6 +53,7 @@ const Form = () => {
       setReturnPolicy(editItem.returnPolicy);
     } else {
       onClearInput();
+      idRef.current?.focus();
     }
   }, [isEdit, editItem]);
   const categoryOptions = [
@@ -63,12 +72,14 @@ const Form = () => {
   const [returnPolicy, setReturnPolicy] = useState('');
   const [errors, setErrors] = useState({ field: '', message: '' });
 
+  const idRef = useRef<TextInput>(null);
   const titleRef = useRef<TextInput>(null);
   const priceRef = useRef<TextInput>(null);
   const descriptionRef = useRef<TextInput>(null);
   const policyRef = useRef<TextInput>(null);
 
   const onClearInput = () => {
+    setId('');
     setTitle('');
     setImage('');
     setPrice('');
@@ -78,24 +89,34 @@ const Form = () => {
   };
 
   const ImagePicker = () => {
-    let options = {
-      storageOptions: {
-        path: 'image',
-      },
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      maxHeight: 2000,
+      maxWidth: 2000,
     };
 
     launchImageLibrary(options, response => {
-      setImage(response.assets[0].uri);
+      console.log('response :>> ', response);
+      let imageUri = response.assets?.[0]?.uri ?? '';
+      setImage(imageUri);
       setErrors({ field: '', message: '' });
     });
   };
 
   const onHandleChange = (
-    field: 'title' | 'price' | 'category' | 'description' | 'returnPolicy',
+    field:
+      | 'id'
+      | 'title'
+      | 'price'
+      | 'category'
+      | 'description'
+      | 'returnPolicy',
     value: string,
   ) => {
-    if (field === 'title') setTitle(value);
-    if (field === 'price') setPrice(value);
+    if (field === 'id') setId(value.replace(/[^0-9]/g, ''));
+    if (field === 'title') setTitle(value.replace(/[^A-Za-z\s]/g, ''));
+    if (field === 'price') setPrice(value.replace(/[^0-9]/g, ''));
     if (field === 'category') setCategory(value);
     if (field === 'description') setDescription(value);
     if (field === 'returnPolicy') setReturnPolicy(value);
@@ -113,9 +134,10 @@ const Form = () => {
       },
       {
         text: 'OK',
-        onPress: () => [
-          dispatch(
+        onPress: async () => [
+          await dispatch(
             insertData({
+              id,
               title,
               image,
               price,
@@ -130,10 +152,46 @@ const Form = () => {
     ]);
   };
 
-  const onSubmit = () => {
+  const onOfflineInsert = () => {
+    Alert.alert('Confirmation', 'Are you sure you want to insert data', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => {
+          // if (dataList.map(x => x.id).includes(id)) {
+          //   Alert.alert('Id already existed Please enter new id');
+          // } else {
+          dispatch(
+            addItem({
+              id,
+              title,
+              image,
+              price,
+              category,
+              description,
+              returnPolicy,
+            }),
+          );
+          onNavigate();
+          // }
+        },
+      },
+    ]);
+  };
+
+  const onSubmit = async () => {
     let formError = { field: '', message: '' };
 
-    if (title.trim() === '') {
+    if (id.trim() === '') {
+      formError.field = 'id';
+      formError.message = 'Id is Required';
+      setErrors(formError);
+      return;
+    } else if (title.trim() === '') {
       formError.field = 'title';
       formError.message = 'Title is Required';
       setErrors(formError);
@@ -165,24 +223,47 @@ const Form = () => {
       return;
     }
 
-    isEdit
-      ? [
-          dispatch(
-            updateData({
-              id,
-              data: {
-                title: title,
-                image: image,
-                price: price,
-                category: category,
-                description: description,
-                returnPolicy: returnPolicy,
-              },
-            }),
-          ),
-          onNavigate(),
-        ]
-      : onInsert();
+    const network = await NetInfo.fetch();
+
+    if (network.isConnected) {
+      isEdit
+        ? [
+            await dispatch(
+              updateData({
+                id,
+                data: {
+                  title: title,
+                  image: image,
+                  price: price,
+                  category: category,
+                  description: description,
+                  returnPolicy: returnPolicy,
+                },
+              }),
+            ),
+            onNavigate(),
+          ]
+        : onInsert();
+    } else {
+      isEdit
+        ? [
+            await dispatch(
+              updateItem({
+                id,
+                data: {
+                  title: title,
+                  image: image,
+                  price: price,
+                  category: category,
+                  description: description,
+                  returnPolicy: returnPolicy,
+                },
+              }),
+            ),
+            onNavigate(),
+          ]
+        : onOfflineInsert();
+    }
 
     onClearInput();
   };
@@ -193,9 +274,25 @@ const Form = () => {
         <Text style={styles.header}>Items</Text>
         <View style={styles.formView}>
           <View>
+            <Text style={styles.text}>{strings.id}</Text>
+            <CustomTextInput
+              placeholder="Enter Your Id"
+              editable={isEdit ? false : true}
+              ref={idRef}
+              returnKeyType="next"
+              onSubmitEditing={() => titleRef.current?.focus()}
+              value={id}
+              onChangeText={val => onHandleChange('id', val)}
+            />
+            {errors.field === 'id' && (
+              <Text style={styles.errorText}>{errors.message}</Text>
+            )}
+          </View>
+          <View>
             <Text style={styles.text}>{strings.name}</Text>
             <CustomTextInput
               placeholder="Enter Your Title"
+              autoCapitalize="words"
               ref={titleRef}
               returnKeyType="next"
               onSubmitEditing={() => priceRef.current?.focus()}
@@ -229,6 +326,7 @@ const Form = () => {
             <Text style={styles.text}>{strings.price}</Text>
             <CustomTextInput
               placeholder="Enter Your Price"
+              keyboardType="number-pad"
               ref={priceRef}
               value={price}
               onChangeText={val => onHandleChange('price', val)}

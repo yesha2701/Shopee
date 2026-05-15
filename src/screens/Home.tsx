@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import {
   FlatList,
   Image,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -21,12 +22,13 @@ import { useSharedValue } from 'react-native-reanimated';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../redux/store';
 import { useRef } from 'react';
-import { fetchData } from '../redux/actions/userActions';
-import { Todo } from '../redux/slice/UserSlice';
+import { fetchData } from '../redux/actions/itemsAction';
+import { Todo } from '../redux/slice/itemsSlice';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigationType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Keychain from 'react-native-keychain';
 
 const Home = () => {
   const carouselImages = [
@@ -37,7 +39,7 @@ const Home = () => {
   ];
   const ref = useRef<ICarouselInstance>(null);
   const progress = useSharedValue<number>(0);
-  const Data = useSelector((state: RootState) => state.items);
+  const Data = useSelector((state: RootState) => state.itemSlice.items);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -55,6 +57,15 @@ const Home = () => {
 
   const onNavigate = () => {
     navigation.navigate('Details');
+  };
+
+  const onLogout = async () => {
+    try {
+      await Keychain.resetGenericPassword();
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Failed to delete token', error);
+    }
   };
 
   const Item = ({ item }: { item: Todo }) => {
@@ -76,7 +87,7 @@ const Home = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.topView}>
           <Text style={styles.helloStyle}>{strings.greet}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={onLogout}>
             <Text style={styles.logoutStyle}>{strings.logout}</Text>
           </TouchableOpacity>
         </View>
@@ -97,8 +108,8 @@ const Home = () => {
                 </View>
               );
             }}
-            width={400}
-            height={190}
+            width={Platform.OS === 'ios' ? 400 : 490}
+            height={180}
             autoPlay={true}
             pagingEnabled={true}
             scrollAnimationDuration={1000}

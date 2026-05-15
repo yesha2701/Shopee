@@ -27,10 +27,13 @@ export const styles = StyleSheet.create({
     padding: moderateScale(20),
   },
   photoView: {
-    marginTop: verticalScale(30),
-    marginBottom: verticalScale(40),
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(30),
   },
   buttonView: {
     marginTop: verticalScale(25),
+  },
+  errorText: {
+    color: colors.red,
   },
 });

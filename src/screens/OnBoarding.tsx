@@ -1,3 +1,4 @@
+/* eslint-disable no-lone-blocks */
 import { Image, ScrollView, Text, View } from 'react-native';
 import { styles } from './OnBoardingStyles';
 import { images } from '../../assets/images';
@@ -14,6 +15,10 @@ const OnBoarding = () => {
   const onNavigate = () => {
     navigation.navigate('Registration');
   };
+  const onHasAccount = () => {
+    navigation.navigate('Login');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -33,7 +38,10 @@ const OnBoarding = () => {
           </View>
           <View style={styles.accountView}>
             <Text style={styles.accountStyle}>{strings.account}</Text>
-            <CustomArrowButton source={icons.rightArrow} onPress={() => null} />
+            <CustomArrowButton
+              source={icons.rightArrow}
+              onPress={() => onHasAccount()}
+            />
           </View>
         </View>
       </ScrollView>

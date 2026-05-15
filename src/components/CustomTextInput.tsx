@@ -1,6 +1,7 @@
 import {
   Image,
   ImageProps,
+  KeyboardTypeOptions,
   Text,
   TextInput,
   TouchableOpacity,
@@ -29,6 +30,8 @@ interface CustomTextInputProps {
   returnKeyType?: 'done' | 'go' | 'next' | 'send';
   onChangeText?: (val: string) => void;
   value?: string;
+  keyboardType?: KeyboardTypeOptions;
+  autoCapitalize?: 'none' | 'words';
   editable?: boolean;
 }
 
@@ -53,6 +56,8 @@ const CustomTextInput = forwardRef<CustomTextInputRef, CustomTextInputProps>(
       onChangeText,
       value,
       editable,
+      keyboardType,
+      autoCapitalize,
       ...props
     },
     ref,
@@ -98,6 +103,8 @@ const CustomTextInput = forwardRef<CustomTextInputRef, CustomTextInputProps>(
             onChangeText={onChangeText}
             value={value}
             editable={editable}
+            keyboardType={keyboardType}
+            autoCapitalize={autoCapitalize}
             {...props}
           />
           {(secureTextEntry || rightIcon) && (

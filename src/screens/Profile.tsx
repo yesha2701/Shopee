@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { styles } from './ProfileStyle';
 import { useRoute } from '@react-navigation/native';
-import { Todo } from '../redux/slice/UserSlice';
+import { Todo } from '../redux/slice/itemsSlice';
 
 const Profile = () => {
   console.log('Profile-------------------------------');

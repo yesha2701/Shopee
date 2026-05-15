@@ -1,49 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit';
-import {
-  deleteData,
-  fetchData,
-  insertData,
-  updateData,
-} from '../actions/userActions';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export interface Todo {
+export interface userData {
   id: string;
-  title: string;
-  description: string;
-  category: string;
-  price: string;
-  image: string;
-  returnPolicy: string;
+  name: string;
+  email: string;
+  password: string;
 }
 
-export interface todoState {
-  items: Todo[];
+export interface userState {
+  users: userData[];
 }
 
-const initialState: todoState = {
-  items: [],
+const initialState: userState = {
+  users: [],
 };
 
 const UserSlice = createSlice({
-  name: 'items',
+  name: 'users',
   initialState,
-  reducers: {},
-  extraReducers(builder) {
-    builder
-      .addCase(fetchData.fulfilled, (state, action) => {
-        state.items = action.payload;
-      })
-      .addCase(insertData.fulfilled, (state, action) => {
-        state.items.push(action.payload);
-      })
-      .addCase(updateData.fulfilled, (state, action) => {
-        const Index = state.items.findIndex(i => i.id === action.payload.id);
-        if (Index !== -1) state.items[Index] = action.payload;
-      })
-      .addCase(deleteData.fulfilled, (state, action) => {
-        state.items = state.items.filter(i => i.id !== action.payload.id);
-      });
+  reducers: {
+    registerData: (state, action: PayloadAction<userData>) => {
+      state.users.push(action.payload);
+    },
   },
 });
 
+export const { registerData } = UserSlice.actions;
 export default UserSlice.reducer;
