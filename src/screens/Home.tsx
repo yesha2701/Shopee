@@ -28,7 +28,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigationType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Keychain from 'react-native-keychain';
+import { useAuth } from '../contexts/AuthContext';
 
 const Home = () => {
   const carouselImages = [
@@ -38,6 +38,7 @@ const Home = () => {
     images.cosmetic04,
   ];
   const ref = useRef<ICarouselInstance>(null);
+  const { logout, username } = useAuth();
   const progress = useSharedValue<number>(0);
   const Data = useSelector((state: RootState) => state.itemSlice.items);
   const dispatch = useAppDispatch();
@@ -59,15 +60,6 @@ const Home = () => {
     navigation.navigate('Details');
   };
 
-  const onLogout = async () => {
-    try {
-      await Keychain.resetGenericPassword();
-      navigation.navigate('Login');
-    } catch (error) {
-      console.error('Failed to delete token', error);
-    }
-  };
-
   const Item = ({ item }: { item: Todo }) => {
     return (
       <View style={styles.listView}>
@@ -86,8 +78,11 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.topView}>
-          <Text style={styles.helloStyle}>{strings.greet}</Text>
-          <TouchableOpacity onPress={onLogout}>
+          <Text style={styles.helloStyle}>
+            {strings.greet}
+            {username.split('@')[0]}!
+          </Text>
+          <TouchableOpacity onPress={logout}>
             <Text style={styles.logoutStyle}>{strings.logout}</Text>
           </TouchableOpacity>
         </View>
@@ -104,7 +99,7 @@ const Home = () => {
             renderItem={({ item }) => {
               return (
                 <View style={styles.carouselItem}>
-                  <Image source={item} style={styles.carouselImg} />;
+                  <Image source={item} style={styles.carouselImg} />
                 </View>
               );
             }}

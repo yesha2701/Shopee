@@ -13,6 +13,9 @@ export const styles = StyleSheet.create({
     paddingTop: moderateScale(50),
     paddingHorizontal: horizontalScale(15),
   },
+  keyboard: {
+    flex: 1,
+  },
   topView: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -55,7 +58,11 @@ export const styles = StyleSheet.create({
     borderRadius: moderateScale(45),
   },
   itemView: {
+    flex: 1,
     rowGap: verticalScale(15),
+  },
+  flatListStyle: {
+    paddingBottom: verticalScale(280),
   },
   listView: {
     flex: 0.5,

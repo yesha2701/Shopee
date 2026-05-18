@@ -5,7 +5,7 @@ import {
   FlatList,
   Image,
   KeyboardAvoidingView,
-  ScrollView,
+  Platform,
   Text,
   TouchableOpacity,
   View,
@@ -35,7 +35,6 @@ const Details = () => {
   ];
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  console.log('selectedCategory :>> ', selectedCategory);
 
   const Data = useSelector((state: RootState) => state.itemSlice.items);
   const dispatch = useAppDispatch();
@@ -75,6 +74,7 @@ const Details = () => {
           onPress: async () => {
             if ((await network).isConnected) {
               dispatch(deleteData(item.id));
+              dispatch(fetchData());
             } else {
               dispatch(deleteItem(item.id));
             }
@@ -120,54 +120,56 @@ const Details = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <KeyboardAvoidingView>
-          <View style={styles.topView}>
-            <Text style={styles.topTitle}>{strings.title}</Text>
-            <CustomTextInput
-              placeholder="Search"
-              textInputStyle={styles.topSearch}
-              onChangeText={text => setSearchQuery(text)}
-            />
-          </View>
-          <View style={styles.categoryView}>
-            <Text style={styles.categoryText}>{strings.categories}</Text>
-            <View style={styles.categoryImgView}>
-              <FlatList
-                data={categories}
-                keyExtractor={item => item.id.toString()}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.categoryBtn}
-                    onPress={() => setSelectedCategory(item.name)}
-                  >
-                    <View style={styles.imgView}>
-                      <Image source={item.image} style={styles.categoriesImg} />
-                    </View>
-                    <Text>{item.name}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          </View>
-          <View style={styles.itemView}>
-            <View style={styles.insertVew}>
-              <Text style={styles.categoryText}>{strings.justForYou}</Text>
-              <CustomArrowButton
-                source={icons.add}
-                onPress={() => onInsert()}
-              />
-            </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboard}
+      >
+        <View style={styles.topView}>
+          <Text style={styles.topTitle}>{strings.title}</Text>
+          <CustomTextInput
+            placeholder="Search"
+            textInputStyle={styles.topSearch}
+            onChangeText={text => setSearchQuery(text)}
+          />
+        </View>
+        <View style={styles.categoryView}>
+          <Text style={styles.categoryText}>{strings.categories}</Text>
+          <View style={styles.categoryImgView}>
             <FlatList
-              data={filteredList}
-              renderItem={({ item }) => <Items item={item} />}
-              numColumns={2}
+              data={categories}
+              keyExtractor={item => item.id.toString()}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.categoryBtn}
+                  onPress={() => setSelectedCategory(item.name)}
+                >
+                  <View style={styles.imgView}>
+                    <Image source={item.image} style={styles.categoriesImg} />
+                  </View>
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              )}
             />
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </View>
+        <View style={styles.itemView}>
+          <View style={styles.insertVew}>
+            <Text style={styles.categoryText}>{strings.justForYou}</Text>
+            <CustomArrowButton source={icons.add} onPress={() => onInsert()} />
+          </View>
+          <FlatList
+            data={filteredList}
+            renderItem={({ item }) => <Items item={item} />}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={
+              Platform.OS === 'ios' ? null : styles.flatListStyle
+            }
+          />
+        </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };

@@ -18,8 +18,9 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigationType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../redux/store';
+import { RootState, useAppDispatch } from '../redux/store';
 import { registerData } from '../redux/slice/userSlice';
+import { useSelector } from 'react-redux';
 
 const Registration = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -30,6 +31,7 @@ const Registration = () => {
     navigation.goBack();
   };
 
+  const Data = useSelector((state: RootState) => state.userSlice.users);
   const dispatch = useAppDispatch();
 
   const [id, setId] = useState('');
@@ -38,6 +40,8 @@ const Registration = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ field: '', message: '' });
   const regex = /\S+@\S+\.\S+/;
+  const strongRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
   const idRef = useRef<TextInput>(null);
   const nameRef = useRef<TextInput>(null);
@@ -68,6 +72,22 @@ const Registration = () => {
     }
   };
 
+  const onDispatch = () => {
+    if (Data.map(x => x.id).includes(id)) {
+      Alert.alert('Id Already exist');
+    } else {
+      dispatch(
+        registerData({
+          id,
+          name,
+          email,
+          password,
+        }),
+      ),
+        onNavigate();
+    }
+  };
+
   const onInsert = () => {
     Alert.alert('Confirmation', 'Are you sure you want to insert data', [
       {
@@ -77,17 +97,7 @@ const Registration = () => {
       },
       {
         text: 'OK',
-        onPress: () => [
-          dispatch(
-            registerData({
-              id,
-              name,
-              email,
-              password,
-            }),
-          ),
-          onNavigate(),
-        ],
+        onPress: () => onDispatch(),
       },
     ]);
   };
@@ -110,9 +120,9 @@ const Registration = () => {
       formError.message = 'Email is Not Entered Properly';
       setErrors(formError);
       return;
-    } else if (password.trim() === '') {
+    } else if (password.trim() === '' || !strongRegex.test(password)) {
       formError.field = 'password';
-      formError.message = 'Password is Required';
+      formError.message = 'Password is Required,Should be entered poperly';
       setErrors(formError);
       return;
     }

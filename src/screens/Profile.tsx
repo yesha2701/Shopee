@@ -5,7 +5,6 @@ import { useRoute } from '@react-navigation/native';
 import { Todo } from '../redux/slice/itemsSlice';
 
 const Profile = () => {
-  console.log('Profile-------------------------------');
   const route = useRoute();
   const { item } = route.params as { item: Todo };
   return (

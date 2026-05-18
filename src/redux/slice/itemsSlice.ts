@@ -35,15 +35,25 @@ const ItemSlice = createSlice({
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<Todo>) => {
-      console.log('Data Inserted');
       state.items.push(action.payload);
+      // const tempNote = {
+      //   ...action.payload,
+      //   id: Date.now().toString(),
+      //   isOffline: true,
+      // };
+
+      // state.offlineData.push(tempNote as Todo);
     },
     updateItem: (state, action) => {
-      // const { id, title } = action.payload;
-      // const Item = state.items.find(i => i.id === id);
-      // if (Item) Item.title = title;
       const Index = state.items.findIndex(i => i.id === action.payload.id);
       if (Index !== -1) state.items[Index] = action.payload;
+
+      // if (!state.offlineData) return;
+      // state.offlineData = state.offlineData.map(item =>
+      //   item.id === action.payload.id
+      //     ? { ...item, ...action.payload.data }
+      //     : item,
+      // );
     },
     deleteItem: (state, action) => {
       state.items = state.items.filter(i => i.id !== action.payload);

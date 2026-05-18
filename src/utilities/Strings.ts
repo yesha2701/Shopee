@@ -6,7 +6,7 @@ export const strings = {
   create: `Create ${'\n'}Account`,
   login: 'Login',
   loginTitle: 'Good to see you back!',
-  greet: 'Hello, Romina!',
+  greet: 'Hello,',
   logout: 'Logout',
   announcement: 'Announcement',
   lorem:

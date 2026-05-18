@@ -6,42 +6,28 @@ import { RootStackParamList } from '../types/navigationType';
 import Login from '../screens/Login';
 import BottomNavigator from './BottomNavigator';
 import Form from '../screens/Form';
-import * as Keychain from 'react-native-keychain';
-import { useEffect, useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Stack = createStackNavigator<RootStackParamList>();
+
 const StackNavigator = () => {
-  const [user, setUser] = useState(false);
-
-  const getAuthToken = async () => {
-    try {
-      const credentials = await Keychain.getGenericPassword();
-      if (credentials) {
-        setUser(true);
-        return credentials.username && credentials.password;
-      }
-      return null;
-    } catch (error) {
-      console.error('Failed to retrieve token', error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    getAuthToken();
-  }, []);
+  const { isLoggedIn } = useAuth();
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {user ? (
-          <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+        {isLoggedIn ? (
+          <>
+            <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+            <Stack.Screen name="Form" component={Form} />
+          </>
         ) : (
-          <Stack.Screen name="OnBoarding" component={OnBoarding} />
+          <>
+            <Stack.Screen name="OnBoarding" component={OnBoarding} />
+            <Stack.Screen name="Registration" component={Registration} />
+            <Stack.Screen name="Login" component={Login} />
+          </>
         )}
-        <Stack.Screen name="Registration" component={Registration} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Form" component={Form} />
       </Stack.Navigator>
     </NavigationContainer>
   );

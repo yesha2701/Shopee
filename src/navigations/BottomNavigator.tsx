@@ -26,7 +26,9 @@ const BottomNavigator = () => {
               <View>
                 <Image
                   source={icons.shop}
-                  style={{ tintColor: focused ? colors.primary : colors.black }}
+                  style={{
+                    tintColor: focused ? colors.primary : colors.black,
+                  }}
                 />
               </View>
             );
@@ -42,7 +44,9 @@ const BottomNavigator = () => {
               <View>
                 <Image
                   source={icons.details}
-                  style={{ tintColor: focused ? colors.primary : colors.black }}
+                  style={{
+                    tintColor: focused ? colors.primary : colors.black,
+                  }}
                 />
               </View>
             );
@@ -58,7 +62,9 @@ const BottomNavigator = () => {
               <View>
                 <Image
                   source={icons.profile}
-                  style={{ tintColor: focused ? colors.primary : colors.black }}
+                  style={{
+                    tintColor: focused ? colors.primary : colors.black,
+                  }}
                 />
               </View>
             );

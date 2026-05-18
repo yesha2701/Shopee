@@ -17,9 +17,9 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationType';
 import { addItem, Todo, updateItem } from '../redux/slice/itemsSlice';
-import { useAppDispatch } from '../redux/store';
+import { RootState, useAppDispatch } from '../redux/store';
 import NetInfo from '@react-native-community/netinfo';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 const Form = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -31,10 +31,10 @@ const Form = () => {
     navigation.navigate('BottomNavigator', { screen: 'Details' });
   };
 
-  // const dataList = useSelector(
-  //   (state: RootState) => state.itemSlice.offlineData,
-  // );
-  // console.log('dataList :>> ', dataList);
+  const dataList = useSelector(
+    (state: RootState) => state.itemSlice.offlineData,
+  );
+  console.log('dataList :>> ', dataList);
   const dispatch = useAppDispatch();
 
   const route = useRoute();
@@ -91,13 +91,9 @@ const Form = () => {
   const ImagePicker = () => {
     const options: ImageLibraryOptions = {
       mediaType: 'photo',
-      includeBase64: false,
-      maxHeight: 2000,
-      maxWidth: 2000,
     };
 
     launchImageLibrary(options, response => {
-      console.log('response :>> ', response);
       let imageUri = response.assets?.[0]?.uri ?? '';
       setImage(imageUri);
       setErrors({ field: '', message: '' });
@@ -152,6 +148,25 @@ const Form = () => {
     ]);
   };
 
+  const onOfflineDispatch = () => {
+    if (dataList.map(x => x.id).includes(id)) {
+      Alert.alert('Id Already exist');
+    } else {
+      dispatch(
+        addItem({
+          id,
+          title,
+          image,
+          price,
+          category,
+          description,
+          returnPolicy,
+        }),
+      ),
+        onNavigate();
+    }
+  };
+
   const onOfflineInsert = () => {
     Alert.alert('Confirmation', 'Are you sure you want to insert data', [
       {
@@ -162,22 +177,7 @@ const Form = () => {
       {
         text: 'OK',
         onPress: () => {
-          // if (dataList.map(x => x.id).includes(id)) {
-          //   Alert.alert('Id already existed Please enter new id');
-          // } else {
-          dispatch(
-            addItem({
-              id,
-              title,
-              image,
-              price,
-              category,
-              description,
-              returnPolicy,
-            }),
-          );
-          onNavigate();
-          // }
+          onOfflineDispatch();
         },
       },
     ]);
@@ -247,7 +247,7 @@ const Form = () => {
     } else {
       isEdit
         ? [
-            await dispatch(
+            dispatch(
               updateItem({
                 id,
                 data: {
