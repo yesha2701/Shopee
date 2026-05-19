@@ -32,7 +32,9 @@ export const styles = StyleSheet.create({
   loginView: {
     flex: 1,
     padding: moderateScale(20),
+    // justifyContent: 'flex-end',
     marginTop: verticalScale(80),
+    // backgroundColor: colors.red,
   },
   loginText: {
     fontSize: moderateScale(52),

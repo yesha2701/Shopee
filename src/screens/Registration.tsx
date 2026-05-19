@@ -28,10 +28,11 @@ const Registration = () => {
     navigation.navigate('Login');
   };
   const onCancel = () => {
-    navigation.goBack();
+    navigation.popToTop();
   };
 
   const Data = useSelector((state: RootState) => state.userSlice.users);
+  console.log('Data :>> ', Data);
   const dispatch = useAppDispatch();
 
   const [id, setId] = useState('');
@@ -122,7 +123,7 @@ const Registration = () => {
       return;
     } else if (password.trim() === '' || !strongRegex.test(password)) {
       formError.field = 'password';
-      formError.message = 'Password is Required,Should be entered poperly';
+      formError.message = 'Password is Required,Should be entered properly';
       setErrors(formError);
       return;
     }
@@ -158,9 +159,9 @@ const Registration = () => {
                 value={id}
                 onChangeText={val => onHandleChange('id', val)}
               />
-              {errors.field === 'id' && (
-                <Text style={styles.errorText}>{errors.message}</Text>
-              )}
+              {errors.field === 'id' &&
+                (idRef.current?.focus(),
+                (<Text style={styles.errorText}>{errors.message}</Text>))}
               <CustomTextInput
                 placeholder="Name"
                 autoCapitalize="words"
@@ -170,9 +171,9 @@ const Registration = () => {
                 value={name}
                 onChangeText={val => onHandleChange('name', val)}
               />
-              {errors.field === 'name' && (
-                <Text style={styles.errorText}>{errors.message}</Text>
-              )}
+              {errors.field === 'name' &&
+                (nameRef.current?.focus(),
+                (<Text style={styles.errorText}>{errors.message}</Text>))}
               <CustomTextInput
                 placeholder="Email"
                 autoCapitalize="none"
@@ -182,9 +183,9 @@ const Registration = () => {
                 value={email}
                 onChangeText={val => onHandleChange('email', val)}
               />
-              {errors.field === 'email' && (
-                <Text style={styles.errorText}>{errors.message}</Text>
-              )}
+              {errors.field === 'email' &&
+                (emailRef.current?.focus(),
+                (<Text style={styles.errorText}>{errors.message}</Text>))}
               <CustomTextInput
                 placeholder="Password"
                 secureTextEntry={true}
@@ -194,9 +195,9 @@ const Registration = () => {
                 value={password}
                 onChangeText={val => onHandleChange('password', val)}
               />
-              {errors.field === 'password' && (
-                <Text style={styles.errorText}>{errors.message}</Text>
-              )}
+              {errors.field === 'password' &&
+                (passwordRef.current?.focus(),
+                (<Text style={styles.errorText}>{errors.message}</Text>))}
             </View>
             <View style={styles.buttonView}>
               <CustomButton label="Done" onPress={() => onSubmit()} />

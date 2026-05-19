@@ -17,9 +17,8 @@ import {
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigationType';
 import { addItem, Todo, updateItem } from '../redux/slice/itemsSlice';
-import { RootState, useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../redux/store';
 import NetInfo from '@react-native-community/netinfo';
-import { useSelector } from 'react-redux';
 const Form = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -31,10 +30,6 @@ const Form = () => {
     navigation.navigate('BottomNavigator', { screen: 'Details' });
   };
 
-  const dataList = useSelector(
-    (state: RootState) => state.itemSlice.offlineData,
-  );
-  console.log('dataList :>> ', dataList);
   const dispatch = useAppDispatch();
 
   const route = useRoute();
@@ -149,22 +144,19 @@ const Form = () => {
   };
 
   const onOfflineDispatch = () => {
-    if (dataList.map(x => x.id).includes(id)) {
-      Alert.alert('Id Already exist');
-    } else {
-      dispatch(
-        addItem({
-          id,
-          title,
-          image,
-          price,
-          category,
-          description,
-          returnPolicy,
-        }),
-      ),
-        onNavigate();
-    }
+    dispatch(
+      addItem({
+        id,
+        title,
+        image,
+        price,
+        category,
+        description,
+        returnPolicy,
+      }),
+    );
+
+    onNavigate();
   };
 
   const onOfflineInsert = () => {
@@ -284,9 +276,9 @@ const Form = () => {
               value={id}
               onChangeText={val => onHandleChange('id', val)}
             />
-            {errors.field === 'id' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'id' &&
+              (idRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
           </View>
           <View>
             <Text style={styles.text}>{strings.name}</Text>
@@ -299,9 +291,9 @@ const Form = () => {
               value={title}
               onChangeText={val => onHandleChange('title', val)}
             />
-            {errors.field === 'title' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'title' &&
+              (titleRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
           </View>
           <View>
             <Text style={styles.text}>{strings.image}</Text>
@@ -331,9 +323,9 @@ const Form = () => {
               value={price}
               onChangeText={val => onHandleChange('price', val)}
             />
-            {errors.field === 'price' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'price' &&
+              (priceRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
           </View>
           <View>
             <Text style={styles.text}>{strings.categories}</Text>
@@ -365,9 +357,9 @@ const Form = () => {
               value={description}
               onChangeText={val => onHandleChange('description', val)}
             />
-            {errors.field === 'description' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'description' &&
+              (descriptionRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
           </View>
           <View>
             <Text style={styles.text}>{strings.returnPolicy}</Text>
@@ -379,9 +371,9 @@ const Form = () => {
               value={returnPolicy}
               onChangeText={val => onHandleChange('returnPolicy', val)}
             />
-            {errors.field === 'returnPolicy' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'returnPolicy' &&
+              (policyRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
           </View>
         </View>
         <CustomButton

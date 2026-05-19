@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   imgView: {
     padding: moderateScale(5),
     borderRadius: moderateScale(45),
-    borderWidth: 1,
+    borderWidth: moderateScale(1),
     borderColor: colors.lightGrey,
     marginBottom: verticalScale(3),
   },
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   },
   listView: {
     flex: 0.5,
-    padding: 10,
+    padding: moderateScale(10),
     rowGap: verticalScale(10),
     shadowOffset: { width: 0, height: 5 },
     shadowColor: colors.black,
@@ -116,5 +116,9 @@ export const styles = StyleSheet.create({
   },
   footerText: {
     color: colors.lightGrey,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: moderateScale(12),
   },
 });

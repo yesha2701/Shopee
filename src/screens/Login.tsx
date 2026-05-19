@@ -28,15 +28,17 @@ const Login = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const onCancel = () => {
-    navigation.navigate('OnBoarding');
+    navigation.popToTop();
   };
 
   const Data = useSelector((state: RootState) => state.userSlice.users);
-  console.log('Data :>> ', Data);
+  console.log('Data----------Login-------- :>> ', Data);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ field: '', message: '' });
   const regex = /\S+@\S+\.\S+/;
+  const strongRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
 
   const emailRef = useRef<TextInput>(null);
   const passwordRef = useRef<TextInput>(null);
@@ -65,7 +67,7 @@ const Login = () => {
       formError.message = 'Email is Not Entered Properly';
       setErrors(formError);
       return;
-    } else if (password.trim() === '') {
+    } else if (password.trim() === '' || !strongRegex.test(password)) {
       formError.field = 'password';
       formError.message =
         'Password is Required. Please Enter Your password properly ';
@@ -88,11 +90,11 @@ const Login = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.container}
-        >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
+        <ScrollView showsVerticalScrollIndicator={false}>
           <View>
             <Image source={images.bubble4} style={styles.bubble4} />
             <Image source={images.bubble5} style={styles.bubble5} />
@@ -114,9 +116,9 @@ const Login = () => {
               value={email}
               onChangeText={val => onHandleChange('email', val)}
             />
-            {errors.field === 'email' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'email' &&
+              (emailRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
             <CustomTextInput
               placeholder="Password"
               secureTextEntry={true}
@@ -126,14 +128,14 @@ const Login = () => {
               value={password}
               onChangeText={val => onHandleChange('password', val)}
             />
-            {errors.field === 'password' && (
-              <Text style={styles.errorText}>{errors.message}</Text>
-            )}
+            {errors.field === 'password' &&
+              (passwordRef.current?.focus(),
+              (<Text style={styles.errorText}>{errors.message}</Text>))}
             <CustomButton label="Login" onPress={() => onLogin()} />
             <CustomCancelButton label="Cancel" onPress={() => onCancel()} />
           </View>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
