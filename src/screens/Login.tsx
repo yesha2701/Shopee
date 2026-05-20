@@ -32,7 +32,6 @@ const Login = () => {
   };
 
   const Data = useSelector((state: RootState) => state.userSlice.users);
-  console.log('Data----------Login-------- :>> ', Data);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({ field: '', message: '' });

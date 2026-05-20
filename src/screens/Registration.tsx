@@ -32,7 +32,6 @@ const Registration = () => {
   };
 
   const Data = useSelector((state: RootState) => state.userSlice.users);
-  console.log('Data :>> ', Data);
   const dispatch = useAppDispatch();
 
   const [id, setId] = useState('');
